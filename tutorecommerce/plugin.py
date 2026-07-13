@@ -20,8 +20,12 @@ config = {
         "VERSION": __version__,
         "API_TIMEOUT": 5,
         "CURRENCY": "USD",
-        "DOCKER_IMAGE": "{{ DOCKER_REGISTRY }}overhangio/openedx-ecommerce:{{ ECOMMERCE_VERSION }}",
-        "WORKER_DOCKER_IMAGE": "{{ DOCKER_REGISTRY }}overhangio/openedx-ecommerce-worker:{{ ECOMMERCE_VERSION }}",
+        # Pinned to the final published (Sumac) service images: upstream
+        # never released 20.x ecommerce images (the stack was removed in
+        # Teak). This fork carries the Sumac service forward - do NOT let
+        # the tag track ECOMMERCE_VERSION.
+        "DOCKER_IMAGE": "{{ DOCKER_REGISTRY }}overhangio/openedx-ecommerce:19.0.0",
+        "WORKER_DOCKER_IMAGE": "{{ DOCKER_REGISTRY }}overhangio/openedx-ecommerce-worker:19.0.0",
         "EXTRA_PIP_REQUIREMENTS": [],
         "HOST": "ecommerce.{{ LMS_HOST }}",
         "MYSQL_DATABASE": "ecommerce",
