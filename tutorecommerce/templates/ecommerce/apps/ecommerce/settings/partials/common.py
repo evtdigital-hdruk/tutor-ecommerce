@@ -106,14 +106,3 @@ EXTRA_PAYMENT_PROCESSOR_URLS["{{ payment_processor }}"] = "{{ urls_module }}"
 {% endfor %}
 
 {{ patch("ecommerce-settings-common") }}
-
-# Enterprise lookups. The LMS does not enable edx-enterprise
-# (ENABLE_ENTERPRISE_INTEGRATION is off), but ecommerce still asks it for the
-# user's enterprise learner record on every basket, and only ConnectionError,
-# HTTPError and Timeout are tolerated on that call. Point it at the internal
-# LMS, whose 404 is caught, instead of the public hostname, where a proxy or
-# marketing redirect can answer 200 with HTML and crash /basket/add with a
-# JSON decode error.
-from urllib.parse import urljoin  # noqa: E402  pylint: disable=wrong-import-position
-ENTERPRISE_SERVICE_URL = "http://lms:8000/enterprise/"
-ENTERPRISE_API_URL = urljoin(f"{ENTERPRISE_SERVICE_URL}/", "api/v1/")
