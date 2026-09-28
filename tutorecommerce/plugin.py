@@ -79,7 +79,7 @@ def _add_ecommerce_mfe_apps(
                 # HDR UK fork: resolves the ecommerce URLs at call time so the
                 # order history page works with Tutor's runtime MFE config.
                 "repository": "https://github.com/evtdigital-hdruk/frontend-app-ecommerce.git",
-                "version": "hdr-uk/v19.1.0",
+                "version": "upgrade/to-ulmo",
                 "port": 7296,
             },
             "payment": {
