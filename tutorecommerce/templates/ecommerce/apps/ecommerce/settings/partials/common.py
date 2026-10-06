@@ -41,6 +41,15 @@ JWT_AUTH["JWT_ISSUERS"] = [
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = {% if ENABLE_HTTPS %}True{% else %}False{% endif %}
 SOCIAL_AUTH_EDX_OAUTH2_ISSUER = "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ LMS_HOST }}"
 SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = "http://lms:8000"
+# ecommerce maps the LMS JWT's administrator and superuser claims to
+# is_staff and is_superuser (auth_backends), but social-auth-core has
+# refused to update those two fields in its user_details step since 3.3.3,
+# so the SSO sign-in never sets them: staff reach the Oscar dashboard only
+# once something else has set the flag, such as a JWT-authenticated API
+# call, which edx-drf-extensions does map. Keep protecting the identity and
+# password fields and let the two flags follow the LMS.
+SOCIAL_AUTH_NO_DEFAULT_PROTECTED_USER_FIELDS = True
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ["username", "id", "pk", "email", "password", "is_active"]
 
 BACKEND_SERVICE_EDX_OAUTH2_SECRET = "{{ ECOMMERCE_OAUTH2_SECRET }}"
 BACKEND_SERVICE_EDX_OAUTH2_PROVIDER_URL = "http://lms:8000/oauth2"
