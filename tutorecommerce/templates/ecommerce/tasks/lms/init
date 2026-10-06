@@ -5,6 +5,10 @@
 
 ./manage.py lms manage_user ecommerce ecommerce@openedx --staff --superuser --unusable-password
 
+# The SSO clients need the profile scope as well as user_id: ecommerce takes
+# a user's staff flag from the administrator claim, which the LMS puts in the
+# JWT only for that scope. Without it nobody can reach the Oscar dashboard or
+# the course administration tool.
 # Development client
 ./manage.py lms create_dot_application \
     --grant-type client-credentials \
@@ -21,7 +25,7 @@
     --redirect-uris "http://{{ ECOMMERCE_HOST }}:8130/complete/edx-oauth2/" \
     --client-id {{ ECOMMERCE_OAUTH2_KEY_SSO_DEV }} \
     --client-secret {{ ECOMMERCE_OAUTH2_SECRET_SSO }} \
-    --scopes user_id \
+    --scopes user_id,profile,email \
     --skip-authorization \
     --update \
     ecommerce-sso-dev \
@@ -43,7 +47,7 @@
   --redirect-uris "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ ECOMMERCE_HOST }}/complete/edx-oauth2/" \
   --client-id {{ ECOMMERCE_OAUTH2_KEY_SSO }} \
   --client-secret {{ ECOMMERCE_OAUTH2_SECRET_SSO }} \
-  --scopes user_id \
+  --scopes user_id,profile,email \
   --skip-authorization \
   --update \
   ecommerce-sso \
